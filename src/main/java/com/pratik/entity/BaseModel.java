@@ -12,18 +12,17 @@ import lombok.Setter;
 
 public class BaseModel {
 	
-	private Boolean is_active;
+	private Boolean isactive;
 	
-	private Boolean is_deleted;
+	private Boolean isdeleted;
 	
-	private Integer created_by;
+	private Integer createdby;
 	
-	private Date created_on;
+	private Date createdon;
 	
-	private Integer updated_by;
+	private Integer updatedby;
 	
-	private Date updated_on;
-
+	private Date updatedon;
 	
 	
 }
