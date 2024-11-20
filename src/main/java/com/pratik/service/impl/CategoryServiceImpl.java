@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 import com.pratik.dto.CategoryDto;
 import com.pratik.dto.CategoryResponse;
 import com.pratik.entity.Category;
+import com.pratik.exception.ResourceNotFoundException;
 import com.pratik.repository.CategoryRepository;
 import com.pratik.service.CategoryService;
 
@@ -83,11 +84,15 @@ public class CategoryServiceImpl implements CategoryService  {
 	}
  
 	@Override
-	public CategoryDto getCategoryById(Integer id) {
-		Optional<Category> findByCategory = categoryRepo.findByIdAndIsdeletedFalse(id);
+	public CategoryDto getCategoryById(Integer id) throws Exception {
+		Category category = categoryRepo.findByIdAndIsdeletedFalse(id).orElseThrow(() -> new ResourceNotFoundException("Category not found with id"+ id));
 		
-		if(findByCategory.isPresent()) {
-			Category category = findByCategory.get();
+		
+		if(!ObjectUtils.isEmpty(category)) {
+//			 if(category.getName()==null) {
+//				 throw new IllegalArgumentException("Name is null"); 
+//			 }
+			category.getName().toUpperCase();
 			return mapper.map(category, CategoryDto.class);
 		}
 		return null;
