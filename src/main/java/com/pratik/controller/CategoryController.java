@@ -28,7 +28,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@PostMapping("/save-category")
+	@PostMapping("/save")
 	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categorydto){
 		Boolean saveCategory = categoryService.saveCategory(categorydto);
 		
