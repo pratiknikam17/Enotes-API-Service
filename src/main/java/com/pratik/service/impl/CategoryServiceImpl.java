@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService  {
 		
 //		Category category=new Category();
 //		category.setName(categorydto.getName());
-//		category.setDescription(categorydto.getDescription());
+//		category.se tDescription(categorydto.getDescription());
 //		category.setIs_active(categorydto.getIs_active());
 		
 		//Validation checking
@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService  {
 		
 		if(ObjectUtils.isEmpty(category.getId())) {
 			category.setIsdeleted(false);
-			category.setCreatedby(1);
+//			category.setCreatedby(1);
 			category.setCreatedon(new Date());
 		}
 		else {
@@ -67,8 +67,8 @@ public class CategoryServiceImpl implements CategoryService  {
 			category.setCreatedon(existCategory.getCreatedon());
 			category.setIsdeleted(existCategory.getIsdeleted());
 			
-			category.setUpdatedby(1);
-			category.setUpdatedon(new Date());
+//			category.setUpdatedby(1);
+//			category.setUpdatedon(new Date());
 		}
 		
 		
