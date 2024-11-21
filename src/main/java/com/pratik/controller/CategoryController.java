@@ -59,7 +59,7 @@ public class CategoryController {
 			return new ResponseEntity<>(allCategory,HttpStatus.OK);
 		}
 	}
-	
+	 
 	@GetMapping("/active")
 	public ResponseEntity<?> getActiveCategory(){
 		List<CategoryResponse> allCategory = categoryService.getActiveCategory();
