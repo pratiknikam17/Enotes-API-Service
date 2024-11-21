@@ -23,6 +23,7 @@ import com.pratik.entity.Category;
 import com.pratik.exception.ResourceNotFoundException;
 import com.pratik.service.CategoryService;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -46,7 +47,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> getAllCategory(){
+	public ResponseEntity<?> getAllCategory(){ 
 //		String nm=null;
 //		nm.toUpperCase();
 		List<CategoryDto> allCategory = categoryService.getAllCategory();

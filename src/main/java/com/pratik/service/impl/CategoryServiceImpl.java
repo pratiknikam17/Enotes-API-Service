@@ -13,8 +13,10 @@ import com.pratik.dto.CategoryDto;
 import com.pratik.dto.CategoryResponse;
 import com.pratik.entity.Category;
 import com.pratik.exception.ResourceNotFoundException;
+import com.pratik.exception.ValidationException;
 import com.pratik.repository.CategoryRepository;
 import com.pratik.service.CategoryService;
+import com.pratik.util.Validation;
 
 @Service
 
@@ -25,6 +27,9 @@ public class CategoryServiceImpl implements CategoryService  {
 	
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private Validation validation;
 	 
 	@Override
 	public Boolean saveCategory(CategoryDto categorydto) {
@@ -33,6 +38,9 @@ public class CategoryServiceImpl implements CategoryService  {
 //		category.setName(categorydto.getName());
 //		category.setDescription(categorydto.getDescription());
 //		category.setIs_active(categorydto.getIs_active());
+		
+		//Validation checking
+		validation.categoryValidation(categorydto);
 		
 		Category category=mapper.map(categorydto,Category.class);
 		
