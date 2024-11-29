@@ -1,5 +1,6 @@
 package com.pratik.exception;
 
+import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleValidationException(ValidationException e){
 //		return new ResponseEntity<>(e.getErrors(),HttpStatus.BAD_REQUEST);
 		return CommonUtil.createErrorResponse(e.getErrors(),HttpStatus.BAD_REQUEST);
+
+	}
+	
+	@ExceptionHandler(FileNotFoundException.class)
+	public ResponseEntity<?> handleFileNotFoundException(FileNotFoundException e){
+//		return new ResponseEntity<>(e.getErrors(),HttpStatus.BAD_REQUEST);
+		return CommonUtil.createErrorResponse(e.getMessage(),HttpStatus.NOT_FOUND);
 
 	}
 	
