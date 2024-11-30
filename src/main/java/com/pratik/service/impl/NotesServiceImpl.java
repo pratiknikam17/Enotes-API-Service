@@ -1,5 +1,6 @@
 package com.pratik.service.impl;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,7 +16,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pratik.dto.NotesDto;
 import com.pratik.dto.NotesDto.CategoryDto;
+import com.pratik.dto.NotesResponse;
 import com.pratik.entity.FileDetails;
 import com.pratik.entity.Notes;
 import com.pratik.exception.ResourceNotFoundException;
@@ -162,6 +166,28 @@ public class NotesServiceImpl implements NotesService {
 		FileDetails fileDtls=fileRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("File is not available"));
 		
 		return fileDtls;
+	}
+
+	@Override
+	public NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize) {
+		
+		Pageable pageable =PageRequest.of(pageNo, pageSize);
+		Page<Notes> pageNotes =notesRepo.findByCreatedby(userId,pageable);
+		 
+		List<NotesDto> notesDto=pageNotes.get().map(n -> mapper.map(n, NotesDto.class)).toList();
+		
+		NotesResponse notes = NotesResponse.builder()
+				.notes(notesDto)
+				.pageNo(pageNotes.getNumber())
+				.pageSize(pageNotes.getSize())
+				.totalElements(pageNotes.getTotalElements())
+				.totalPages(pageNotes.getTotalPages())
+				.isFirst(pageNotes.isFirst())
+				.isLast(pageNotes.isLast())
+				.build();
+				
+		
+		return notes;
 	}
 	
 	
