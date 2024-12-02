@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pratik.dto.FavouriteNoteDto;
 import com.pratik.dto.NotesDto;
 import com.pratik.dto.NotesResponse;
+import com.pratik.entity.FavouriteNote;
 import com.pratik.entity.FileDetails;
 
 public interface NotesService {
@@ -30,6 +32,10 @@ public interface NotesService {
 
 	public void emptyRecycleBin(int userId);
 
-
+	public void favouriteNotes(Integer noteId) throws Exception;
+	
+	public void unfavouriteNotes(Integer noteId ) throws Exception;
+	
+	public List<FavouriteNoteDto> getUserFavouriteNotes() throws Exception;
 
 }

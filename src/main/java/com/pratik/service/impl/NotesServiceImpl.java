@@ -29,14 +29,17 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pratik.dto.FavouriteNoteDto;
 import com.pratik.dto.NotesDto;
 import com.pratik.dto.NotesDto.CategoryDto;
 import com.pratik.dto.NotesDto.FilesDto;
 import com.pratik.dto.NotesResponse;
+import com.pratik.entity.FavouriteNote;
 import com.pratik.entity.FileDetails;
 import com.pratik.entity.Notes;
 import com.pratik.exception.ResourceNotFoundException;
 import com.pratik.repository.CategoryRepository;
+import com.pratik.repository.FavouriteNoteRepository;
 import com.pratik.repository.FileRepository;
 import com.pratik.repository.NotesRepository;
 import com.pratik.service.NotesService;
@@ -46,6 +49,9 @@ public class NotesServiceImpl implements NotesService {
 	
 	@Autowired
 	private NotesRepository notesRepo;
+	
+	@Autowired
+	private FavouriteNoteRepository favouriteNoteRepo;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -268,6 +274,36 @@ public class NotesServiceImpl implements NotesService {
 		}
 		
 	}
+
+	@Override
+	public void favouriteNotes(Integer noteId) throws Exception {
+		int userId=2;
+		
+		Notes notes=notesRepo.findById(noteId).orElseThrow(() -> new ResourceNotFoundException("Notes not found & id is Invalid"));
+		FavouriteNote favouriteNote=FavouriteNote.builder()
+				.note(notes)
+				.userId(userId)
+				.build();
+		favouriteNoteRepo.save(favouriteNote);
+		
+		
+	}
+
+	@Override
+	public void unfavouriteNotes(Integer favouriteNoteId) throws Exception {
+		FavouriteNote favnote=favouriteNoteRepo.findById(favouriteNoteId).orElseThrow(() -> new ResourceNotFoundException("Favourite Notes not found & id is Invalid"));
+		favouriteNoteRepo.delete(favnote);
+		
+	}
+
+	@Override
+	public List<FavouriteNoteDto> getUserFavouriteNotes() throws Exception {
+		int userId=2;
+		List<FavouriteNote> favouriteNotes = favouriteNoteRepo.findByUserId(userId);	
+		return favouriteNotes.stream().map(fn -> mapper.map(fn, FavouriteNoteDto.class)).toList();
+		 
+	}
+	
 	
 	
 }
