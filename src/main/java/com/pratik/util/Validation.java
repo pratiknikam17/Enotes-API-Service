@@ -18,15 +18,20 @@ import com.pratik.dto.TodoDto.StatusDto;
 import com.pratik.dto.UserDto;
 import com.pratik.entity.Role;
 import com.pratik.enums.TodoStatus;
+import com.pratik.exception.ExistDataException;
 import com.pratik.exception.ResourceNotFoundException;
 import com.pratik.exception.ValidationException;
 import com.pratik.repository.RoleRepository;
+import com.pratik.repository.UserRepository;
 
 @Component
 public class Validation {
 	
 	@Autowired
 	private RoleRepository roleRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
 	 
 	public void categoryValidation(CategoryDto categoryDto) {
 		
@@ -100,6 +105,13 @@ public class Validation {
 		
 		if(!StringUtils.hasText(userDto.getEmail()) || !userDto.getEmail().matches(Constants.EMAIL_REGEX) ) {
 			throw new IllegalArgumentException("Email is invalid");	
+		} else {
+			//validate email exist
+			Boolean existEmail=userRepo.existsByEmail(userDto.getEmail());
+			if(existEmail) {
+				throw new ExistDataException("Email already exist");
+			}
+			
 		}
 		
 		if(!StringUtils.hasText(userDto.getMobno()) || !userDto.getMobno().matches(Constants.MOBNO_REGEX)) {
