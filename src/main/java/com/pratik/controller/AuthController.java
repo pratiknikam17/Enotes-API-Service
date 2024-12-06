@@ -13,14 +13,14 @@ import com.pratik.service.UserService;
 import com.pratik.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
 	@Autowired
 	private UserService userService;
 	
 	@PostMapping("/")
-	public ResponseEntity<?> registeruser(@RequestBody UserDto userDto){
+	public ResponseEntity<?> registeruser(@RequestBody UserDto userDto) throws Exception{
 		Boolean register = userService.register(userDto);
 		if(register) {
 			return CommonUtil.createBuildResponseMessage("Register success", HttpStatus.CREATED);
