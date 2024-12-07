@@ -1,6 +1,7 @@
 package com.pratik.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.pratik.dto.EmailRequest;
 import com.pratik.dto.UserDto;
+import com.pratik.entity.AccountStatus;
 import com.pratik.entity.Role;
 import com.pratik.entity.User;
 import com.pratik.repository.RoleRepository;
@@ -35,31 +37,39 @@ public class UserServiceImpl implements UserService {
 	private EmailService emailService;
 		
 	@Override
-	public Boolean register(UserDto userDto) throws Exception {
+	public Boolean register(UserDto userDto,String url) throws Exception {
 		
 		validation.userValidation(userDto);
 		User user= mapper.map(userDto, User.class);
 		setRole(userDto,user);
 		
+		AccountStatus status=AccountStatus.builder()
+				.isActive(false)
+				.verificationCode(UUID.randomUUID().toString())
+				.build();
+		user.setStatus(status);
+		
 		User saveUser= userRepo.save(user);
 		if(!ObjectUtils.isEmpty(saveUser)) {
 			
 			//Send  Email
-			emailSend(saveUser);
+			emailSend(saveUser,url);
 			return true;
 		}
 		 	
 		return false;
 	}
 
-	private void emailSend(User saveUser) throws Exception {
+	private void emailSend(User saveUser, String url) throws Exception {
 		
-		String message = "Hi, <b>"+saveUser.getFirstName()+"</b>"
+		String message = "Hi, <b>[[username]]</b>"
 		+"<br>Your account registration successfully.<br>"
 		+"<br>Click the below link to verify & active your account<br>"
-		+"<a href='#'>Click Here</a> <br><br>"
+		+"<a href='[[url]]'>Click Here</a> <br><br>"
 		+"Thanks,<br> <b>Enotes.com</b>";
 		
+		message = message.replace("[[username]]", saveUser.getFirstName());
+		message=message.replace("[[url]]",url+"/api/v1/home/verify?uid="+saveUser.getId()+"&&code="+saveUser.getStatus().getVerificationCode());
 		EmailRequest emailRequest=EmailRequest.builder()
 				.to(saveUser.getEmail())
 				.title("Account Creation Confirmation")
