@@ -22,6 +22,7 @@ import com.pratik.entity.Role;
 import com.pratik.entity.User;
 import com.pratik.repository.RoleRepository;
 import com.pratik.repository.UserRepository;
+import com.pratik.service.JwtService;
 import com.pratik.service.UserService;
 import com.pratik.util.Validation;
 
@@ -48,6 +49,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired 
+	private JwtService jwtService;
 		
 	@Override
 	public Boolean register(UserDto userDto,String url) throws Exception {
@@ -110,7 +114,7 @@ public class UserServiceImpl implements UserService {
 		if(authenticate.isAuthenticated()) {
 			 CustomUserDetails customUserDetails=(CustomUserDetails)authenticate.getPrincipal();
 			
-			String token="sdfdfsfdfdfsdfdfdfdfdfdfdfdfdfd";
+			String token=jwtService.generateToken(customUserDetails.getUser());
 			LoginResponse loginResponse=LoginResponse.builder()
 	 				.user(mapper.map(customUserDetails.getUser(), UserDto.class))
 					.token(token)
