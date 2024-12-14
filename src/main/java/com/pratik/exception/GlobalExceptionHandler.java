@@ -1,6 +1,7 @@
 package com.pratik.exception;
 
 import java.io.FileNotFoundException;
+import java.nio.file.AccessDeniedException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleException(Exception e){
 		log.error("GlobalExceptionHandler :: handleException ::",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e){
+		log.error("GlobalExceptionHandler :: handleException ::",e.getMessage());
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(SuccessException.class)
@@ -76,22 +83,22 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(FileNotFoundException.class)
 	public ResponseEntity<?> handleFileNotFoundException(FileNotFoundException e){
-		return CommonUtil.createErrorResponse(e.getMessage(),HttpStatus.NOT_FOUND);
+		return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.NOT_FOUND);
 
 	}
 	
 	@ExceptionHandler(ExistDataException.class)
 	public ResponseEntity<?> handleExistDataException(ExistDataException e){
-		return CommonUtil.createErrorResponse(e.getMessage(),HttpStatus.CONFLICT);
+		return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
-		return CommonUtil.createErrorResponse(e.getMessage(),HttpStatus.BAD_REQUEST);
+		return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e){
-		return CommonUtil.createErrorResponse(e.getMessage(),HttpStatus.BAD_REQUEST);
+		return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 	
 }
