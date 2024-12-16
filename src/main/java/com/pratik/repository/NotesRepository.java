@@ -19,4 +19,5 @@ public interface NotesRepository extends JpaRepository<Notes, Integer> {
 
 	List<Notes> findAllByIsDeletedAndDeletedOnBefore(boolean b, LocalDateTime cutOfDate);
 
+	
 }

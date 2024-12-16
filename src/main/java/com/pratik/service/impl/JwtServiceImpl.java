@@ -2,7 +2,6 @@ package com.pratik.service.impl;
 
 import java.security.Key;
 import java.util.Base64;
-import java.util.Base64.Decoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
 		String token = Jwts.builder().claims().add(claims)
 				.subject(user.getEmail())
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + 60 * 60 * 10))
+				.expiration(new Date(System.currentTimeMillis() + 60 * 60* 60 * 10))
 				.and()
 				.signWith(getKey())
 				.compact();
@@ -79,21 +78,17 @@ public class JwtServiceImpl implements JwtService {
 
 	private Claims extractAllClaims(String token) {
 		try {
-				
-			return  Jwts.parser()
+		return Jwts.parser()
 				.verifyWith(decrytKey(secretKey))
 				.build().parseSignedClaims(token).getPayload();
-		} 
+		}
 		catch (ExpiredJwtException e) {
 			throw new JwtTokenExpiredException("Token is Expired");
-		}
-		catch (JwtException e) {
-			throw new JwtTokenExpiredException("Invalid JWT Token");
-		}
-		catch (Exception e) {
+		}catch (JwtException e) {
+			throw new JwtTokenExpiredException("Invalid Jwt token");
+		}catch (Exception e) {
 			throw e;
 		}
-		
 	}
 
 	private SecretKey decrytKey(String secretKey) {
@@ -108,7 +103,7 @@ public class JwtServiceImpl implements JwtService {
 		Boolean isExpired=isTokenExpired(token);
 		if(username.equalsIgnoreCase(userDetails.getUsername()) && !isExpired)
 		{
-			return true; 
+			return true;
 		}
 		return false;
 	}

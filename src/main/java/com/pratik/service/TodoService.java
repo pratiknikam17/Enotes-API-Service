@@ -11,5 +11,7 @@ public interface TodoService {
 	public TodoDto getTodoById(Integer id) throws Exception;
 	
 	public List<TodoDto> getTodoByuser();
+
+	
 	
 }
