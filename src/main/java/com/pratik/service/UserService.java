@@ -1,13 +1,9 @@
 package com.pratik.service;
 
-import com.pratik.dto.LoginRequest;
-import com.pratik.dto.LoginResponse;
-import com.pratik.dto.UserRequest;
+
+import com.pratik.dto.PasswordChngRequest;
 
 public interface UserService {
 
-	public Boolean register(UserRequest userDto, String url) throws Exception;
-
-	public LoginResponse login(LoginRequest loginRequest);
-	
+	public void changePassword(PasswordChngRequest passwordRequest);
 }
